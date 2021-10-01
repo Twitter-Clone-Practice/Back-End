@@ -14,7 +14,7 @@ module Mutations
       user = User.new(
         username: args[:username],
         password: args[:password],
-        password_digest: args[:password_confirmation],
+        password_confirmation: args[:password_confirmation],
         email: args[:email],
         date_of_birth: args[:date_of_birth]
       )
