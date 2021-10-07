@@ -80,7 +80,7 @@ describe 'New follower' do
             }
         GRAPHQL
 
-        Follower.create(user_id: @user_eternal.id, follower_id: @user_crimson.id)
+        Following.create(user_id: @user_eternal.id, following_id: @user_crimson.id)
 
         post graphql_path, params: { query: query_string }
         result = JSON.parse(response.body)
@@ -91,5 +91,31 @@ describe 'New follower' do
         expect(result['data']['followUser']['success']).to eq(nil)
         expect(result['data']['followUser']['errors']).to be_a(Array)
         expect(result['data']['followUser']['errors']).to eq(["Already following user"])
+    end
+
+    it "should return an error if user already is following a user" do
+        query_string = <<-GRAPHQL
+            mutation {
+                followUser(input: {
+                    primaryUserId: #{@user_eternal.id}
+                    userToFollowId: #{@user_crimson.id}
+                }) {
+                    success
+                    errors
+                }
+            }
+        GRAPHQL
+
+        Follower.create(user_id: @user_crimson.id, follower_id: @user_eternal.id)
+
+        post graphql_path, params: { query: query_string }
+        result = JSON.parse(response.body)
+        
+        expect(result).to be_a(Hash)
+        expect(result['data']).to be_a(Hash)
+        expect(result['data']['followUser']).to be_a(Hash)
+        expect(result['data']['followUser']['success']).to eq(nil)
+        expect(result['data']['followUser']['errors']).to be_a(Array)
+        expect(result['data']['followUser']['errors']).to eq(["User already following"])
     end
 end
