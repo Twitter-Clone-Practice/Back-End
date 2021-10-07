@@ -1,6 +1,6 @@
 module Mutations
   class FollowUser < BaseMutation
-    field :success, Boolean, null: false
+    field :success, Boolean, null: true
     field :errors, [String], null: false
 
     argument :primary_user_id, Integer, required: true
@@ -30,19 +30,19 @@ module Mutations
             new_follow.delete
             {
               Success: false,
-              errors: new_follower.errors.full_messages
+              errors: ["User already following"]
             }
           end
         else
           {
             Success: false,
-            errors: new_follow.errors.full_messages
+            errors: ["Already following user"]
           }
         end
       else
         {
           Success: false,
-          errors: ["User does not exist!"]
+          errors: ["A user does not exist!"]
         }
       end
     end
