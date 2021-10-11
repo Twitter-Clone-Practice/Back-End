@@ -175,4 +175,50 @@ describe 'Create User Mutation' do
         expect(result['data']['createUser']['errors']).to include("Username has already been taken")
         expect(result['data']['createUser']['errors']).to include("Email has already been taken")
     end
+
+    it "should be able to delete a user" do
+        query_string = <<-GRAPHQL
+            mutation {
+                deleteUser(input: {
+                    id: #{@user_eternal.id}
+                }) {
+                    message
+                    errors
+                }
+            }
+        GRAPHQL
+
+        post graphql_path, params: { query: query_string }
+        result = JSON.parse(response.body)
+
+        expect(result).to be_a(Hash)
+        expect(result['data']).to be_a(Hash)
+        expect(result['data']['deleteUser']).to be_a(Hash)
+        expect(result['data']['deleteUser']['message']).to eq("User has been successfully deleted")
+        expect(result['data']['deleteUser']['errors']).to be_a(Array)
+        expect(result['data']['deleteUser']['errors']).to eq([])
+    end
+
+    it "should return error if id is not found when deleting a user" do
+        query_string = <<-GRAPHQL
+            mutation {
+                deleteUser(input: {
+                    id: #{@user_eternal.id + 1}
+                }) {
+                    message
+                    errors
+                }
+            }
+        GRAPHQL
+
+        post graphql_path, params: { query: query_string }
+        result = JSON.parse(response.body)
+
+        expect(result).to be_a(Hash)
+        expect(result['data']).to be_a(Hash)
+        expect(result['data']['deleteUser']).to be_a(Hash)
+        expect(result['data']['deleteUser']['message']).to eq("")
+        expect(result['data']['deleteUser']['errors']).to be_a(Array)
+        expect(result['data']['deleteUser']['errors']).to include("User id not found")
+    end
 end
