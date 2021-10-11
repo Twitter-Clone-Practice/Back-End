@@ -9,5 +9,6 @@ module Types
 
     field :follower, [UserType], null: true
     field :following, [UserType], null: true
+    field :posts, [PostType], null: true
   end
 end
