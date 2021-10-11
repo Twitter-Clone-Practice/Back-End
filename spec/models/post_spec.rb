@@ -7,5 +7,6 @@ RSpec.describe Post, type: :model do
 
   describe "Relationsships" do
     it { should belong_to :user }
+    it { should have_many :post_infos }
   end
 end
