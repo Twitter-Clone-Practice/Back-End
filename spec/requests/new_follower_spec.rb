@@ -41,6 +41,14 @@ describe 'New follower' do
         expect(result['data']['followUser']['success']).to eq(true)
         expect(result['data']['followUser']['errors']).to be_a(Array)
         expect(result['data']['followUser']['errors']).to eq([])
+        
+        @user_eternal.reload
+        @user_crimson.reload
+
+        expect(@user_eternal.following).to include(@user_crimson)
+        expect(@user_eternal.follower).to eq([])
+        expect(@user_crimson.follower).to include(@user_eternal)
+        expect(@user_crimson.following).to eq([])
     end
 
     it "should return an error if the user does not exist" do
