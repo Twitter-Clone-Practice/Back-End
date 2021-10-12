@@ -174,4 +174,64 @@ describe 'liking a post' do
         expect(result['data']['likePost']['errors']).to be_a(Array)
         expect(result['data']['likePost']['errors']).to eq(["User or post not found"])
     end
+
+    it 'should be able to unlike a post' do
+        post_info = PostInfo.create(user_id: @user_crimson.id, post_id: @post.id, liked: true)
+
+        query_string = <<-GRAPHQL
+            mutation {
+                removeLike(input: {
+                postInfoId: #{post_info.id}
+                }) {
+                success
+                errors
+                }
+            }
+        GRAPHQL
+
+        expect(post_info.liked).to eq(true)
+
+        post graphql_path, params: { query: query_string }
+        result = JSON.parse(response.body)
+
+        post_info.reload
+        expect(post_info.liked).to eq(false)
+
+        expect(result).to be_a(Hash)
+        expect(result['data']).to be_a(Hash)
+        expect(result['data']['removeLike']).to be_a(Hash)
+        expect(result['data']['removeLike']['success']).to eq(true)
+        expect(result['data']['removeLike']['errors']).to be_a(Array)
+        expect(result['data']['removeLike']['errors']).to eq([])
+    end
+
+    it 'should return an error of the post_info_id is not found to remove the like' do
+        post_info = PostInfo.create(user_id: @user_crimson.id, post_id: @post.id, liked: true)
+
+        query_string = <<-GRAPHQL
+            mutation {
+                removeLike(input: {
+                postInfoId: #{post_info.id + 1}
+                }) {
+                success
+                errors
+                }
+            }
+        GRAPHQL
+
+        expect(post_info.liked).to eq(true)
+
+        post graphql_path, params: { query: query_string }
+        result = JSON.parse(response.body)
+
+        post_info.reload
+        expect(post_info.liked).to eq(true)
+
+        expect(result).to be_a(Hash)
+        expect(result['data']).to be_a(Hash)
+        expect(result['data']['removeLike']).to be_a(Hash)
+        expect(result['data']['removeLike']['success']).to eq(false)
+        expect(result['data']['removeLike']['errors']).to be_a(Array)
+        expect(result['data']['removeLike']['errors']).to eq(["Id not found"])
+    end
 end
