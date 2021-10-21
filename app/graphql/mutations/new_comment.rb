@@ -10,11 +10,7 @@ module Mutations
 
     def resolve(args)
       if Post.exists?(args[:post_id]) && User.exists?(args[:user_id])
-        if args.key?(:parent_id)
-          Comment.new_comment(args[:post_id], args[:user_id], args[:body], args[:parent_id])
-        else
-          Comment.new_comment(args[:post_id], args[:user_id], args[:body])
-        end
+        Comment.new_comment(args[:post_id], args[:user_id], args[:body], args[:parent_id])
       else
         {
           comment: nil,
