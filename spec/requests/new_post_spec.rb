@@ -21,7 +21,7 @@ describe 'New Post' do
         post{
           message
           numberOfLikes
-          numberOfReplys
+          numberOfComments
         }
         errors
       }
@@ -36,7 +36,7 @@ describe 'New Post' do
     expect(result['data']['newPost']['post']).to be_a(Hash)
     expect(result['data']['newPost']['post']['message']).to eq("cute")
     expect(result['data']['newPost']['post']['numberOfLikes']).to eq(0)
-    expect(result['data']['newPost']['post']['numberOfReplys']).to eq(0)
+    expect(result['data']['newPost']['post']['numberOfComments']).to eq(0)
     expect(result['data']['newPost']['errors']).to eq([])
   end
 
@@ -50,7 +50,7 @@ describe 'New Post' do
         post{
           message
           numberOfLikes
-          numberOfReplys
+          numberOfComments
         }
         errors
       }
