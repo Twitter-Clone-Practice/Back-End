@@ -21,4 +21,12 @@ class Post < ApplicationRecord
 
     post.save
   end
+
+  def self.subtract_from_num_of_comments(post_id, comments_to_subtract = 1)
+    post = self.find_by_id(post_id)
+    
+    post.number_of_comments -= comments_to_subtract
+
+    post.save
+  end
 end
