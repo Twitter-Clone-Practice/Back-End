@@ -6,16 +6,6 @@ class Comment < ApplicationRecord
 
   validates :body, presence: true
 
-  def exists?(coment_id)
-    comment = Comment.find_by_id(comment_id)
-
-    if comment
-      return true
-    else
-      return false
-    end
-  end
-
   def self.new_comment(post_id, user_id, body, parent_id = nil)
     if parent_id == nil || Comment.exists?(parent_id)
       comment = Comment.new(post_id: post_id, user_id: user_id, body: body, parent_id: parent_id)
