@@ -13,4 +13,12 @@ class Post < ApplicationRecord
       return false
     end
   end
+
+  def self.add_to_num_of_comments(post_id)
+    post = self.find_by_id(post_id)
+
+    post.number_of_comments += 1
+
+    post.save
+  end
 end

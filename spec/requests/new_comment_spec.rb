@@ -41,11 +41,15 @@ describe 'Create User Mutation' do
         GRAPHQL
 
         expect(Comment.all.count).to eq(0)
+        expect(@post.number_of_comments).to eq(0)
         
         post graphql_path, params: { query: query_string }
         result = JSON.parse(response.body)
-        
+
+        @post.reload
         expect(Comment.all.count).to eq(1)
+        expect(@post.number_of_comments).to eq(1)
+
         expect(result).to be_a(Hash)
         expect(result['data']).to be_a(Hash)
         expect(result['data']['newComment']).to be_a(Hash)
@@ -57,6 +61,8 @@ describe 'Create User Mutation' do
     end
 
     it 'should return a hash of a CommentType and empty errors array when a new reply to a comment is created' do
+        @post.number_of_comments += 1
+        @post.save
         first_comment = Comment.create!(post_id: @post.id, user_id: @user_crimson.id, body: "Comments work")
 
         query_string = <<-GRAPHQL
@@ -79,11 +85,15 @@ describe 'Create User Mutation' do
         GRAPHQL
 
         expect(Comment.all.count).to eq(1)
+        expect(@post.number_of_comments).to eq(1)
         
         post graphql_path, params: { query: query_string }
         result = JSON.parse(response.body)
 
+        @post.reload
         expect(Comment.all.count).to eq(2)
+        expect(@post.number_of_comments).to eq(2)
+
         expect(result).to be_a(Hash)
         expect(result['data']).to be_a(Hash)
         expect(result['data']['newComment']).to be_a(Hash)
@@ -95,6 +105,8 @@ describe 'Create User Mutation' do
     end
 
     it 'should return an error if the parent comment does not exist' do
+        @post.number_of_comments += 1
+        @post.save
         first_comment = Comment.create!(post_id: @post.id, user_id: @user_crimson.id, body: "Comments work")
 
         query_string = <<-GRAPHQL
@@ -117,11 +129,15 @@ describe 'Create User Mutation' do
         GRAPHQL
 
         expect(Comment.all.count).to eq(1)
+        expect(@post.number_of_comments).to eq(1)
         
         post graphql_path, params: { query: query_string }
         result = JSON.parse(response.body)
 
+        @post.reload
         expect(Comment.all.count).to eq(1)
+        expect(@post.number_of_comments).to eq(1)
+
         expect(result).to be_a(Hash)
         expect(result['data']).to be_a(Hash)
         expect(result['data']['newComment']).to be_a(Hash)

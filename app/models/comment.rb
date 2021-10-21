@@ -21,6 +21,7 @@ class Comment < ApplicationRecord
       comment = Comment.new(post_id: post_id, user_id: user_id, body: body, parent_id: parent_id)
 
       if comment.save
+        Post.add_to_num_of_comments(post_id)
         {
           comment: comment,
           errors: []
