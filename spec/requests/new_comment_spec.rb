@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Create User Mutation' do
+describe 'Create comment Mutation' do
     before :each do
         @user_eternal = User.create(
             username: 'EternalFlame',
