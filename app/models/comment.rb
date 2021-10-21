@@ -6,10 +6,10 @@ class Comment < ApplicationRecord
 
   validates :body, presence: true
 
-  def exists?(parent_id)
-    parent_comment = Comment.find_by_id(parent_id)
+  def exists?(coment_id)
+    comment = Comment.find_by_id(comment_id)
 
-    if parent_comment
+    if comment
       return true
     else
       return false
