@@ -10,4 +10,14 @@ class User < ApplicationRecord
 
     validates :username, :email, uniqueness: true, presence: true
     validates :password, :date_of_birth, presence: true
+
+    def exists?(user_id)
+        user = User.find_by_id(user_id)
+    
+        if user
+          return true
+        else
+          return false
+        end
+      end
 end
