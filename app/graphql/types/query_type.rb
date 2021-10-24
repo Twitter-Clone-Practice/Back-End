@@ -19,5 +19,7 @@ module Types
     def user(id:)
       User.find(id)
     end
+
+    field :fetch_post, resolver: Queries::FetchPost
   end
 end
