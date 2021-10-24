@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_005124) do
+ActiveRecord::Schema.define(version: 2021_10_24_024405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,15 @@ ActiveRecord::Schema.define(version: 2021_10_21_005124) do
     t.index ["user_id"], name: "index_followings_on_user_id"
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_likes_on_post_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.bigint "user_id"
     t.string "message"
@@ -70,4 +79,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_005124) do
   add_foreign_key "followers", "users", column: "follower_id"
   add_foreign_key "followings", "users"
   add_foreign_key "followings", "users", column: "following_id"
+  add_foreign_key "likes", "posts"
+  add_foreign_key "likes", "users"
 end
