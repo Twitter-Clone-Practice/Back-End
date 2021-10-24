@@ -9,5 +9,6 @@ module Types
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     field :replies, [CommentType], null: true
+    field :user, UserType, null: false
   end
 end
