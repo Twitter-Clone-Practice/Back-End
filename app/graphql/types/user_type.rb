@@ -10,5 +10,10 @@ module Types
     field :follower, [UserType], null: true
     field :following, [UserType], null: true
     field :posts, [PostType], null: true
+    field :liked_posts, [PostType], null: true
+
+    def liked_posts
+      Post.joins(:likes).where("likes.user_id = ?", object.id )
+    end
   end
 end

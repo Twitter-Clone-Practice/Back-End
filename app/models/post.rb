@@ -1,6 +1,7 @@
 class Post < ApplicationRecord
   belongs_to :user
-  has_many :comments
+  has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
 
   validates :message, presence: true
 
@@ -19,4 +20,20 @@ class Post < ApplicationRecord
 
     post.save
   end
+
+  def self.add_to_num_of_likes(post_id)
+    post = self.find_by_id(post_id)
+
+    post.number_of_likes += 1
+
+    post.save
+  end
+
+  def self.subtract_from_num_of_likes(post_id)
+    post = self.find_by_id(post_id)
+    
+    post.number_of_likes -= 1
+
+    post.save
+  end  
 end

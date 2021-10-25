@@ -9,9 +9,10 @@ RSpec.describe User, type: :model do
   end
 
   describe "Relations" do
-    it {should have_many :followings}
-    it {should have_many :followers}
-    it {should have_many :posts}
+    it { should have_many :followings }
+    it { should have_many :followers }
+    it { should have_many :posts }
+    it { should have_many :likes }
   end
 
   describe "Methods" do
