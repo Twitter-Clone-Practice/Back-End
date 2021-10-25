@@ -10,7 +10,10 @@ module Mutations
 
     def resolve(args)
       like = Like.new(post_id: args[:post_id], user_id: args[:user_id])
+      
       if like.save
+        Post.add_to_num_of_likes(args[:post_id])
+
         { 
           successful: true,
           errors: []
