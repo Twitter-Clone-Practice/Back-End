@@ -21,5 +21,6 @@ module Types
     end
 
     field :fetch_user_liked_posts, resolver: Queries::FetchUserLikedPosts
+    field :fetch_post, resolver: Queries::FetchPost
   end
 end
