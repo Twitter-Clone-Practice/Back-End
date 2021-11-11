@@ -7,9 +7,7 @@ module Mutations
     argument :user_to_follow_id, Integer, required: true
 
     def resolve(args)
-      primary_user = User.find_by(id: args[:primary_user_id])
-      secondary_user = User.find_by(id: args[:user_to_follow_id])
-      if primary_user && secondary_user
+      if User.exists?(args[:primary_user_id]) && User.exists?(args[:user_to_follow_id])
         new_follow = Following.new(
           user_id: args[:primary_user_id],
           following_id: args[:user_to_follow_id]
